@@ -27,7 +27,7 @@ class AuthService {
             {
                 id: user._id,
                 email: user.email,
-                name: user.username,
+                username: user.username,
             },
             process.env.JWT_SECRET!,
             {

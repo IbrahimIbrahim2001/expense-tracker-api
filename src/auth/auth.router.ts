@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AuthController from "./auth.controller.ts";
-import { validate } from "./auth.middleware.ts";
+import { validate } from "../../middleware/validation.ts";
 import { registerSchema } from "./auth.validation.ts";
 
 const router: Router = Router();
