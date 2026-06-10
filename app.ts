@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import AuthRouter from "./src/auth/auth.router.ts";
 import { connectDB } from "./config/connectDB.ts";
+import { errorMiddleware } from "./middleware/error.middleware.ts";
 
 dotenv.config();
 
@@ -20,7 +21,6 @@ app.use(helmet());
 app.use(express.json());
 
 // connect to database
-
 await connectDB();
 
 
@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
 
 // routes
 app.use("/api/auth", AuthRouter);
+
+
+// global error handler 
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
