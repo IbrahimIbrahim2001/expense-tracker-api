@@ -4,6 +4,7 @@ import { comparePassword, hashPassword } from "./auth.utils.ts";
 import jwt from "jsonwebtoken";
 
 class AuthService {
+    // Register
     register = async (data: RegisterDto) => {
         const { password } = data;
         const hashedPassword = await hashPassword(password);
@@ -13,6 +14,7 @@ class AuthService {
         }).save();
     }
 
+    // Login
     login = async (data: LoginDto) => {
         const { email } = data;
         const user = await AuthedUsers.findOne({ email });
@@ -36,6 +38,17 @@ class AuthService {
         );
         const { password, ...userObj } = user.toObject();
         return { user: userObj, token };
+    }
+
+    // Get current user
+    getCurrentUser = async (id: string) => {
+        const user = await AuthedUsers.findById(id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        const { password, ...userObj } = user.toObject();
+        return userObj;
     }
 }
 
