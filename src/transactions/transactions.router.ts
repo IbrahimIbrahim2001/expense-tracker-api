@@ -9,4 +9,9 @@ const router: Router = Router();
 // /api/transactions
 router.get("/", verifyToken, transactionsController.getAll);
 
+// Create new transaction
+// POST
+// /api/transactions/create
+router.post("/create", verifyToken, transactionsController.createTransaction);
+
 export default router;

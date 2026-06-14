@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { TransactionTypes } from "./transaction.types.ts";
 
 const transactionsSchema = new mongoose.Schema({
     category: {
@@ -11,6 +12,7 @@ const transactionsSchema = new mongoose.Schema({
     },
     type: {
         type: String,
+        enum: TransactionTypes,
         required: true
     },
     payement_way: {
