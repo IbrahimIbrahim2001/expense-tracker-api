@@ -9,6 +9,12 @@ class TransactionsService {
 
     // create new transaction
     createTransaction = async (userId: string, data: CreateTransaction) => {
+        const incomeOnly = ["salary"];
+
+        if (incomeOnly.includes(data.category) && data.type === "expense") {
+            throw new Error(`${data.category} cannot be an expense`);
+        }
+
         return await Transactions.create({ ...data, user: userId });
     }
 }

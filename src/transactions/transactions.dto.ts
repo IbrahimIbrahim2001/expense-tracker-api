@@ -1,8 +1,8 @@
-import type { TransactionType } from "./transaction.types.ts";
+import type { Category, PaymentMethod, TransactionType } from "./transaction.types.ts";
 
 export interface CreateTransaction {
-    category: string;
-    amount: string;
+    category: Category;
+    amount: number;
     type: TransactionType;
-    payement_way: string;
+    payement_way: PaymentMethod;
 }
