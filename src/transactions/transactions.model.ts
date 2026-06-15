@@ -16,7 +16,7 @@ const transactionsSchema = new mongoose.Schema({
         enum: TransactionTypes,
         required: true
     },
-    payement_way: {
+    payment_way: {
         type: String,
         enum: PaymentMethods,
         required: true
