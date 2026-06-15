@@ -5,7 +5,8 @@ import transactionsService from "./transactions.service.ts";
 class TransactionsController {
     public getAll: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
         const userId = req.user?.id ?? "";
-        const result = await transactionsService.getAllTransactions(userId);
+        const limit = req.query.limit ? Number(req.query.limit) : undefined;
+        const result = await transactionsService.getAllTransactions(userId, limit);
         res.status(200).json(result);
     })
 
