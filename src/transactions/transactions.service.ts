@@ -30,6 +30,11 @@ class TransactionsService {
 
         return await Transactions.findOneAndUpdate({ _id: transactionId, user: userId }, data, { returnDocument: "after" });
     }
+
+    // delete transaction
+    deleteTransaction = async (userId: string, transactionId: string) => {
+        return await Transactions.findOneAndDelete({ _id: transactionId, user: userId });
+    }
 }
 
 export default new TransactionsService();

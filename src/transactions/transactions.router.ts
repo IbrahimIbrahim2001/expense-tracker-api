@@ -16,6 +16,14 @@ router.get("/", verifyToken, transactionsController.getAll);
 // /api/transactions/create
 router.post("/create", verifyToken, validate(createTransactionSchema), transactionsController.createTransaction);
 
+// Update transaction
+// PUT
+// /api/transactions/update/:id
 router.put("/update/:id", verifyToken, validate(updateTransactionSchema), transactionsController.updateTransaction);
+
+// Delete transaction
+// DELETE
+// /api/transactions/delete/:id
+router.delete("/delete/:id", verifyToken, transactionsController.deleteTransaction);
 
 export default router;
