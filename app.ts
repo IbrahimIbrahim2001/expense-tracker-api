@@ -6,6 +6,7 @@ import AuthRouter from "./src/auth/auth.router.ts";
 import TransactionsRouter from "./src/transactions/transactions.router.ts";
 import { connectDB } from "./config/connectDB.ts";
 import { errorMiddleware } from "./middleware/error.middleware.ts";
+import { startCleanupJob } from "./src/cron/cleanup.ts";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(express.json());
 // connect to database
 await connectDB();
 
+startCleanupJob();
 
 // TESTING
 app.get('/', (req, res) => {
