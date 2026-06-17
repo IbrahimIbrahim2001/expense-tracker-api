@@ -23,7 +23,7 @@ const transactionsSchema = new mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "AuthedUsers",
+        ref: "authedUsers",
         required: true
     }
 }, {

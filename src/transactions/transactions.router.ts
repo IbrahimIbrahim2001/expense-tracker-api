@@ -11,6 +11,12 @@ const router: Router = Router();
 // /api/transactions
 router.get("/", verifyToken, transactionsController.getAll);
 
+
+// Get one transaction
+// GET
+// /api/transaction/:id
+router.get("/:id", verifyToken, transactionsController.getOneTransaction);
+
 // Create new transaction
 // POST
 // /api/transactions/create

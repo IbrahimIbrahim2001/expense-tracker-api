@@ -9,6 +9,11 @@ class TransactionsService {
         return await query
     }
 
+    // get one transaction
+    getTransaction = async (userId: string, transactionId: string) => {
+        return await Transactions.findOne({ _id: transactionId, user: userId });
+    }
+
     // create new transaction
     createTransaction = async (userId: string, data: CreateTransaction) => {
         const incomeOnly = ["salary"];
