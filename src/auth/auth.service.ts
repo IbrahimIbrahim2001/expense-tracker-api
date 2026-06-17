@@ -1,4 +1,4 @@
-import type { LoginDto, RegisterDto } from "./auth.dto.ts";
+import type { LoginDto, RegisterDto, UpdateUserProfileDto } from "./auth.dto.ts";
 import AuthedUsers from "./auth.model.ts";
 import { comparePassword, hashPassword } from "./auth.utils.ts";
 import jwt from "jsonwebtoken";
@@ -49,6 +49,15 @@ class AuthService {
 
         const { password, ...userObj } = user.toObject();
         return userObj;
+    }
+
+    // Update user profile
+    updateUserProfile = async (id: string, data: UpdateUserProfileDto) => {
+        const user = await AuthedUsers.findById(id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return await AuthedUsers.findOneAndUpdate({ _id: id }, data, { returnDocument: "after" });
     }
 }
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import AuthController from "./auth.controller.ts";
 import { validate } from "../../middleware/validation.ts";
-import { registerSchema } from "./auth.validation.ts";
+import { registerSchema, updateUserProfileSchema } from "./auth.validation.ts";
 import { verifyToken } from "../../middleware/verifyToken.ts";
 
 const router: Router = Router();
@@ -11,14 +11,19 @@ const router: Router = Router();
 // /api/auth/register
 router.post("/register", validate(registerSchema), AuthController.register);
 
-// login user
+// Login user
 // POST
 // /api/auth/login
 router.post("/login", AuthController.login);
 
-// get current user
+// Get current user
 // GET
 // /api/auth/current-user
 router.get("/current-user", verifyToken, AuthController.getCurrentUser);
+
+// Update user profile
+// PUT
+// /api/auth/update-profile
+router.put("/update-profile", verifyToken, validate(updateUserProfileSchema), AuthController.updateUserProfile);
 
 export default router;
