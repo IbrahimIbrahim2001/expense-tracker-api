@@ -15,6 +15,13 @@ class TransactionsController {
         const result = await transactionsService.createTransaction(userId, req.body);
         res.status(201).json(result);
     })
+
+    public updateTransaction: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+        const userId = req.user?.id ?? "";
+        const transactionId = req.params.id as string;
+        const result = await transactionsService.updateTransaction(userId, transactionId, req.body);
+        res.status(200).json(result);
+    })
 }
 
 

@@ -6,3 +6,10 @@ export interface CreateTransaction {
     type: TransactionType;
     payment_way: PaymentMethod;
 }
+
+export interface UpdateTransaction {
+    category?: Category;
+    amount?: number;
+    type?: TransactionType;
+    payment_way?: PaymentMethod;
+}

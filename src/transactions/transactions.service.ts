@@ -1,4 +1,4 @@
-import type { CreateTransaction } from "./transactions.dto.ts";
+import type { CreateTransaction, UpdateTransaction } from "./transactions.dto.ts";
 import Transactions from "./transactions.model.ts";
 
 class TransactionsService {
@@ -18,6 +18,17 @@ class TransactionsService {
         }
 
         return await Transactions.create({ ...data, user: userId });
+    }
+
+    // update transaction 
+    updateTransaction = async (userId: string, transactionId: string, data: UpdateTransaction) => {
+        const incomeOnly = ["salary"];
+
+        if (data.category && incomeOnly.includes(data.category) && data.type === "expense") {
+            throw new Error(`${data.category} cannot be an expense`);
+        }
+
+        return await Transactions.findOneAndUpdate({ _id: transactionId, user: userId }, data, { returnDocument: "after" });
     }
 }
 
