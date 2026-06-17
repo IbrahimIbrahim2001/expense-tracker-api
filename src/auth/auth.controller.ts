@@ -25,6 +25,12 @@ class AuthController {
         const result = await authService.updateUserProfile(userId, req.body);
         res.status(200).json(result);
     });
+
+    public deleteUserProfile: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+        const userId = req.user?.id ?? "";
+        await authService.deleteUserProfile(userId);
+        res.status(200).json({ success: true, message: "Account deleted successfully" });
+    });
 }
 
 export default new AuthController();

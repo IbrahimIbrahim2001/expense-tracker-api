@@ -1,5 +1,6 @@
 import type { LoginDto, RegisterDto, UpdateUserProfileDto } from "./auth.dto.ts";
 import AuthedUsers from "./auth.model.ts";
+import Transactions from "../transactions/transactions.model.ts";
 import { comparePassword, hashPassword } from "./auth.utils.ts";
 import jwt from "jsonwebtoken";
 
@@ -58,6 +59,19 @@ class AuthService {
             throw new Error("User not found");
         }
         return await AuthedUsers.findOneAndUpdate({ _id: id }, data, { returnDocument: "after" });
+    }
+
+    // Delete user
+    deleteUserProfile = async (id: string) => {
+        const user = await AuthedUsers.findByIdAndUpdate(
+            id,
+            { isActive: false, deletedAt: new Date() },
+            { returnDocument: "after" }
+        );
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return user;
     }
 }
 

@@ -26,4 +26,9 @@ router.get("/current-user", verifyToken, AuthController.getCurrentUser);
 // /api/auth/update-profile
 router.put("/update-profile", verifyToken, validate(updateUserProfileSchema), AuthController.updateUserProfile);
 
+// Delete user
+// DELETE
+// /api/auth/delete-user
+router.delete("/delete-user", verifyToken, AuthController.deleteUserProfile);
+
 export default router;

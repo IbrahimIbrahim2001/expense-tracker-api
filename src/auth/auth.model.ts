@@ -25,6 +25,14 @@ const authedUsersSchema = new mongoose.Schema({
     address: {
         type: String,
         required: false
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    deletedAt: {
+        type: Date,
+        default: null
     }
 }, {
     timestamps: true,
