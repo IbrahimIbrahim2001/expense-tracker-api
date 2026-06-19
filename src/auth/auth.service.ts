@@ -1,12 +1,22 @@
+import jwt from "jsonwebtoken";
 import type { LoginDto, RegisterDto, UpdateUserProfileDto } from "./auth.dto.ts";
 import AuthedUsers from "./auth.model.ts";
-import Transactions from "../transactions/transactions.model.ts";
 import { comparePassword, hashPassword } from "./auth.utils.ts";
-import jwt from "jsonwebtoken";
 
 class AuthService {
     // Register
     register = async (data: RegisterDto) => {
+        const { email } = data;
+        const user = await AuthedUsers.findOne({ email });
+
+        if (user && !user.isActive) {
+            throw new Error("Account is deactivated");
+        }
+
+        if (user) {
+            throw new Error("Account already exists try to Login");
+        }
+
         const { password } = data;
         const hashedPassword = await hashPassword(password);
         return await new AuthedUsers({
@@ -22,6 +32,11 @@ class AuthService {
         if (!user) {
             throw new Error("User not found");
         }
+
+        if (!user.isActive) {
+            throw new Error("Account is deactivated");
+        }
+
         const isPasswordMatch = await comparePassword(data.password, user.password);
         if (!isPasswordMatch) {
             throw new Error("Invalid credentials");
