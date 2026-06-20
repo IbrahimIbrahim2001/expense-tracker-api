@@ -16,3 +16,11 @@ export const updateUserProfileSchema = Joi.object({
     lastName: Joi.string().min(3),
     address: Joi.string().min(3),
 })
+
+export const requestReactivationSchema = Joi.object({
+    email: Joi.string().email().required(),
+})
+
+export const reactivateSchema = Joi.object({
+    token: Joi.string().required(),
+})

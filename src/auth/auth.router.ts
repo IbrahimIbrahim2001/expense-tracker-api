@@ -1,7 +1,7 @@
 import { Router } from "express";
 import AuthController from "./auth.controller.ts";
 import { validate } from "../../middleware/validation.ts";
-import { loginSchema, registerSchema, updateUserProfileSchema } from "./auth.validation.ts";
+import { loginSchema, reactivateSchema, registerSchema, requestReactivationSchema, updateUserProfileSchema } from "./auth.validation.ts";
 import { verifyToken } from "../../middleware/verifyToken.ts";
 
 const router: Router = Router();
@@ -30,5 +30,15 @@ router.put("/update-profile", verifyToken, validate(updateUserProfileSchema), Au
 // DELETE
 // /api/auth/delete-user
 router.delete("/delete-user", verifyToken, AuthController.deleteUserProfile);
+
+// Request account reactivation
+// POST
+// /api/auth/request-reactivation
+router.post("/request-reactivation", validate(requestReactivationSchema), AuthController.requestReactivation);
+
+// Reactivate page (clickable email link)
+// GET
+// /api/auth/reactivate/:token
+router.get("/reactivate/:token", AuthController.reactivatePage);
 
 export default router;

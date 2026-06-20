@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import type { LoginDto, RegisterDto, UpdateUserProfileDto } from "./auth.dto.ts";
 import AuthedUsers from "./auth.model.ts";
 import { comparePassword, hashPassword } from "./auth.utils.ts";
+import mailService from "../mail/mail.service.ts";
 
 class AuthService {
     // Register
@@ -74,6 +75,43 @@ class AuthService {
             throw new Error("User not found");
         }
         return await AuthedUsers.findOneAndUpdate({ _id: id }, data, { returnDocument: "after" });
+    }
+
+    // Request reactivation
+    requestReactivation = async (email: string) => {
+        const user = await AuthedUsers.findOne({ email });
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        if (user.isActive) {
+            throw new Error("Account is already active");
+        }
+
+        const token = jwt.sign({ email }, process.env.JWT_SECRET!, { expiresIn: "5m" });
+
+        await mailService.sendReactivationLink(email, token);
+    }
+
+    // Reactivate account
+    reactivate = async (token: string) => {
+        const payload = jwt.verify(token, process.env.JWT_SECRET!) as { email: string };
+
+        const user = await AuthedUsers.findOne({ email: payload.email });
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        if (user.isActive) {
+            throw new Error("Account is already active");
+        }
+
+        user.isActive = true;
+        user.deletedAt = null;
+        await user.save();
+
+        return { success: true, message: "Account reactivated successfully" };
     }
 
     // Delete user

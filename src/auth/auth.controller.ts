@@ -1,6 +1,7 @@
 import { type Request, type RequestHandler, type Response } from "express";
 import authService from "./auth.service.ts";
 import asyncHandler from "express-async-handler";
+import { renderReactivationPage } from "./reactivation-page.ts";
 
 class AuthController {
 
@@ -30,6 +31,27 @@ class AuthController {
         const userId = req.user?.id ?? "";
         await authService.deleteUserProfile(userId);
         res.status(200).json({ success: true, message: "Account deleted successfully" });
+    });
+
+    public requestReactivation: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+        await authService.requestReactivation(req.body.email);
+        res.status(200).json({ message: "Reactivation link sent to email" });
+    });
+
+    public reactivatePage: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+        const token = req.params.token as string;
+        let success = false;
+        let message = "";
+
+        try {
+            const result = await authService.reactivate(token);
+            success = result.success;
+            message = result.message;
+        } catch (err: any) {
+            message = err.message || "Invalid or expired token.";
+        }
+
+        res.send(renderReactivationPage(success, message, process.env.EXPO_APP_URL || ""));
     });
 }
 
