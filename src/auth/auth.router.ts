@@ -1,7 +1,7 @@
 import { Router } from "express";
 import AuthController from "./auth.controller.ts";
 import { validate } from "../../middleware/validation.ts";
-import { loginSchema, reactivateSchema, registerSchema, requestReactivationSchema, updateUserProfileSchema } from "./auth.validation.ts";
+import { changePasswordSchema, loginSchema, registerSchema, requestReactivationSchema, updateUserProfileSchema } from "./auth.validation.ts";
 import { verifyToken } from "../../middleware/verifyToken.ts";
 
 const router: Router = Router();
@@ -40,5 +40,10 @@ router.post("/request-reactivation", validate(requestReactivationSchema), AuthCo
 // GET
 // /api/auth/reactivate/:token
 router.get("/reactivate/:token", AuthController.reactivatePage);
+
+// Change password
+// PUT
+// /api/auth/change-password
+router.put("/change-password", verifyToken, validate(changePasswordSchema), AuthController.changePassword);
 
 export default router;

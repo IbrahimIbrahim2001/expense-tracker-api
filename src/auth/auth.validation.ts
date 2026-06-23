@@ -1,9 +1,23 @@
 import Joi from "joi";
+import validator from "validator";
+
+const strongPassword = Joi.string()
+    .min(8)
+    .custom((value, helpers) => {
+        if (!validator.isStrongPassword(value)) {
+            return helpers.error("any.invalid");
+        }
+        return value;
+    })
+    .messages({
+        "string.min": "Password must be at least 8 characters",
+        "any.invalid": "Password must include uppercase, lowercase, number, and symbol",
+    });
 
 export const registerSchema = Joi.object({
     username: Joi.string().min(3).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).required(),
+    password: strongPassword.required(),
 });
 
 export const loginSchema = Joi.object({
@@ -23,4 +37,9 @@ export const requestReactivationSchema = Joi.object({
 
 export const reactivateSchema = Joi.object({
     token: Joi.string().required(),
+})
+
+export const changePasswordSchema = Joi.object({
+    currentPassword: Joi.string().required(),
+    newPassword: strongPassword.required(),
 })

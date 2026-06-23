@@ -53,6 +53,12 @@ class AuthController {
 
         res.send(renderReactivationPage(success, message, process.env.EXPO_APP_URL || ""));
     });
+
+    public changePassword: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+        const userId = req.user?.id ?? "";
+        const result = await authService.changePassword(userId, req.body);
+        res.status(200).json(result);
+    });
 }
 
 export default new AuthController();

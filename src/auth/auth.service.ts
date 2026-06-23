@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import type { LoginDto, RegisterDto, UpdateUserProfileDto } from "./auth.dto.ts";
+import type { ChangePasswordDto, LoginDto, RegisterDto, UpdateUserProfileDto } from "./auth.dto.ts";
 import AuthedUsers from "./auth.model.ts";
 import { comparePassword, hashPassword } from "./auth.utils.ts";
 import mailService from "../mail/mail.service.ts";
@@ -112,6 +112,30 @@ class AuthService {
         await user.save();
 
         return { success: true, message: "Account reactivated successfully" };
+    }
+
+    // Change password
+    changePassword = async (id: string, data: ChangePasswordDto) => {
+        const user = await AuthedUsers.findById(id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        const isMatch = await comparePassword(data.currentPassword, user.password);
+        if (!isMatch) {
+            throw new Error("Current password is incorrect");
+        }
+
+        user.password = await hashPassword(data.newPassword);
+        await user.save();
+
+        const token = jwt.sign(
+            { id: user._id, email: user.email, username: user.username },
+            process.env.JWT_SECRET!,
+            { expiresIn: "7d" },
+        );
+
+        return { message: "Password changed successfully", token };
     }
 
     // Delete user
