@@ -121,9 +121,14 @@ class AuthService {
             throw new Error("User not found");
         }
 
-        const isMatch = await comparePassword(data.currentPassword, user.password);
-        if (!isMatch) {
+        const isCurrentMatch = await comparePassword(data.currentPassword, user.password);
+        if (!isCurrentMatch) {
             throw new Error("Current password is incorrect");
+        }
+
+        const isSameAsOld = await comparePassword(data.newPassword, user.password);
+        if (isSameAsOld) {
+            throw new Error("New password must be different from current password");
         }
 
         user.password = await hashPassword(data.newPassword);
