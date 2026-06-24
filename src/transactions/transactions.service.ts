@@ -2,11 +2,23 @@ import type { CreateTransaction, UpdateTransaction } from "./transactions.dto.ts
 import Transactions from "./transactions.model.ts";
 
 class TransactionsService {
-    // get all transactions 
-    getAllTransactions = async (userId: string, limit?: number) => {
-        const query = Transactions.find({ user: userId }).sort({ createdAt: -1 });
-        if (limit !== undefined) query.limit(limit);
-        return await query
+    // get all transactions
+    getAllTransactions = async (userId: string, limit?: number, cursor?: string) => {
+        const take = limit || 20;
+        const filter: Record<string, unknown> = { user: userId };
+
+        if (cursor) filter._id = { $lt: cursor };
+
+        const data = await Transactions.find(filter)
+            .sort({ _id: -1 })
+            .limit(take + 1)
+            .lean();
+
+        const hasMore = data.length > take;
+        const items = hasMore ? data.slice(0, take) : data;
+        const nextCursor = items.length > 0 ? items[items.length - 1]?._id : null;
+
+        return { data: items, nextCursor, hasMore };
     }
 
     // get one transaction

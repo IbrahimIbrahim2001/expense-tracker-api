@@ -6,7 +6,8 @@ class TransactionsController {
     public getAll: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
         const userId = req.user?.id ?? "";
         const limit = req.query.limit ? Number(req.query.limit) : undefined;
-        const result = await transactionsService.getAllTransactions(userId, limit);
+        const cursor = req.query.cursor ? String(req.query.cursor) : undefined;
+        const result = await transactionsService.getAllTransactions(userId, limit, cursor);
         res.status(200).json(result);
     })
 
