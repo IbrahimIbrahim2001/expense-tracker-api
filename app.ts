@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import AuthRouter from "./src/auth/auth.router.ts";
 import TransactionsRouter from "./src/transactions/transactions.router.ts";
+import DashboardRouter from "./src/dashboard/dashboard.router.ts";
 
 import { connectDB } from "./config/connectDB.ts";
 import { errorMiddleware } from "./middleware/error.middleware.ts";
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 // routes
 app.use("/api/auth", AuthRouter);
 app.use("/api/transactions", TransactionsRouter);
+app.use("/api/dashboard", DashboardRouter);
 
 
 // global error handler 
