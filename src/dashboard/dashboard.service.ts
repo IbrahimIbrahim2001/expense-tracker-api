@@ -1,10 +1,11 @@
+import mongoose from "mongoose";
 import Transactions from "../transactions/transactions.model.ts";
 import { getDateRange } from "./dashboard.utils.ts";
 
 class DashboardService {
     getSummary = async (userId: string, period: string) => {
         const startDate = getDateRange(period);
-        const match: Record<string, unknown> = { user: userId };
+        const match: Record<string, unknown> = { user: new mongoose.Types.ObjectId(userId) };
         if (startDate) match.createdAt = { $gte: startDate };
 
         const result = await Transactions.aggregate([
