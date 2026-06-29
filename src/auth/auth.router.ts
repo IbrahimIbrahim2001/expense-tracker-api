@@ -3,6 +3,7 @@ import AuthController from "./auth.controller.ts";
 import { validate } from "../../middleware/validation.ts";
 import { changePasswordSchema, loginSchema, registerSchema, requestReactivationSchema, updateUserProfileSchema } from "./auth.validation.ts";
 import { verifyToken } from "../../middleware/verifyToken.ts";
+import { upload } from "../../config/multer.ts";
 
 const router: Router = Router();
 
@@ -45,5 +46,10 @@ router.get("/reactivate/:token", AuthController.reactivatePage);
 // PUT
 // /api/auth/change-password
 router.put("/change-password", verifyToken, validate(changePasswordSchema), AuthController.changePassword);
+
+// Upload avatar
+// PUT
+// /api/auth/upload-avatar
+router.put("/upload-avatar", verifyToken, upload.single("avatar"), AuthController.uploadAvatar);
 
 export default router;

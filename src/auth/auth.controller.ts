@@ -59,6 +59,18 @@ class AuthController {
         const result = await authService.changePassword(userId, req.body);
         res.status(200).json(result);
     });
+
+    public uploadAvatar: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+        const userId = req.user?.id ?? "";
+        const file = req.file;
+        if (!file) {
+            res.status(400).json({ message: "No file uploaded" });
+            return;
+        }
+        const avatar = `/uploads/avatars/${file.filename}`;
+        const result = await authService.updateUserProfile(userId, { avatar });
+        res.status(200).json({ avatar, user: result });
+    });
 }
 
 export default new AuthController();

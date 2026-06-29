@@ -40,6 +40,7 @@ app.get('/', (req, res) => {
 app.use("/api/auth", AuthRouter);
 app.use("/api/transactions", TransactionsRouter);
 app.use("/api/dashboard", DashboardRouter);
+app.use("/uploads", express.static("uploads"));
 app.use("/api/budget", BudgetRouter);
 
 
