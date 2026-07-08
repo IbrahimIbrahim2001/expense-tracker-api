@@ -1,8 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import * as helmetModule from "helmet";
-const helmet = helmetModule.default;
+import helmet from "helmet";
 import AuthRouter from "./src/auth/auth.router.ts";
 import TransactionsRouter from "./src/transactions/transactions.router.ts";
 import DashboardRouter from "./src/dashboard/dashboard.router.ts";

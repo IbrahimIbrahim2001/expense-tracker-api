@@ -11,6 +11,9 @@
     "target": "esnext",
     "allowImportingTsExtensions":true,
     "noEmit": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
   
     "types": [],
     // For nodejs:
