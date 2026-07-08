@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import helmet from "helmet";
+// import helmet from "helmet";
 import AuthRouter from "./src/auth/auth.router.ts";
 import TransactionsRouter from "./src/transactions/transactions.router.ts";
 import DashboardRouter from "./src/dashboard/dashboard.router.ts";
@@ -22,7 +22,7 @@ app.use(cors({
   origin: true,
   credentials: true,
 }));
-app.use(helmet());
+// app.use(helmet());
 
 app.use(express.json());
 
