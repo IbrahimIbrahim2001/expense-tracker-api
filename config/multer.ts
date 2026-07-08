@@ -2,7 +2,8 @@ import multer from "multer";
 import path from "node:path";
 import fs from "node:fs";
 
-const dir = "uploads/avatars";
+// const dir = "uploads/avatars";
+const dir = path.join(process.cwd(), "uploads", "avatars");
 if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
 const storage = multer.diskStorage({

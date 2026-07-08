@@ -11,10 +11,12 @@ import { connectDB } from "./config/connectDB.ts";
 import { errorMiddleware } from "./middleware/error.middleware.ts";
 import { startCleanupJob } from "./src/cron/cleanup.ts";
 
+import path from "node:path";
+
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -24,12 +26,12 @@ app.use(cors({
 }));
 // app.use(helmet());
 
-app.use(express.json());
-
 // connect to database
 await connectDB();
 
-startCleanupJob();
+if (process.env.VERCEL !== "1") {
+  startCleanupJob();
+}
 
 // TESTING
 app.get('/', (req, res) => {
@@ -40,13 +42,18 @@ app.get('/', (req, res) => {
 app.use("/api/auth", AuthRouter);
 app.use("/api/transactions", TransactionsRouter);
 app.use("/api/dashboard", DashboardRouter);
-app.use("/uploads", express.static("uploads"));
+const uploadsDir = process.env.VERCEL === "1"
+  ? "/tmp/uploads"
+  : path.join(process.cwd(), "uploads");
+app.use("/uploads", express.static(uploadsDir));
 app.use("/api/budget", BudgetRouter);
 
 
 // global error handler 
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
+
+export default app;
